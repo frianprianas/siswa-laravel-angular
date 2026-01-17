@@ -33,6 +33,35 @@ app.service('ApiService', ['$http', 'API_URL', function($http, API_URL) {
         // Delete siswa
         delete: function(id) {
             return $http.delete(API_URL + '/siswa/' + id);
+        },
+        
+        // Download template CSV
+        downloadTemplate: function() {
+            return $http.get(API_URL + '/siswa/template/download', {
+                responseType: 'blob'
+            });
+        },
+        
+        // Import CSV
+        importCSV: function(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            
+            return $http.post(API_URL + '/siswa/import/csv', formData, {
+                headers: {
+                    'Content-Type': undefined
+                },
+                transformRequest: angular.identity
+            });
+        },
+        
+        // Download failed records
+        downloadFailedRecords: function(failedRecords) {
+            return $http.post(API_URL + '/siswa/import/failed-records', {
+                failed_records: failedRecords
+            }, {
+                responseType: 'blob'
+            });
         }
     };
     

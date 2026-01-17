@@ -118,6 +118,104 @@ app.controller('SiswaListController', ['$scope', 'ApiService', 'AlertService', '
             });
     };
     
+    // Import CSV Functions
+    $scope.selectedFile = null;
+    $scope.importResult = null;
+    $scope.uploadProgress = {
+        uploading: false
+    };
+    
+    // Show import modal
+    $scope.showImportModal = function() {
+        $scope.importResult = null;
+        $scope.selectedFile = null;
+        var modal = new bootstrap.Modal(document.getElementById('importModal'));
+        modal.show();
+    };
+    
+    // Handle file select
+    $scope.handleFileSelect = function(element) {
+        $scope.$apply(function() {
+            $scope.selectedFile = element.files[0];
+        });
+    };
+    
+    // Download template CSV
+    $scope.downloadTemplate = function() {
+        ApiService.siswa.downloadTemplate()
+            .then(function(response) {
+                var blob = new Blob([response.data], { type: 'text/csv' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'template_import_siswa.csv';
+                link.click();
+                AlertService.success('Template CSV berhasil didownload');
+            })
+            .catch(function(error) {
+                console.error('Error downloading template:', error);
+                AlertService.error('Gagal mendownload template');
+            });
+    };
+    
+    // Upload and import CSV
+    $scope.uploadCSV = function() {
+        if (!$scope.selectedFile) {
+            AlertService.error('Pilih file CSV terlebih dahulu');
+            return;
+        }
+        
+        $scope.uploadProgress.uploading = true;
+        $scope.importResult = null;
+        
+        ApiService.siswa.importCSV($scope.selectedFile)
+            .then(function(response) {
+                $scope.uploadProgress.uploading = false;
+                
+                if (response.data.success) {
+                    $scope.importResult = response.data.data;
+                    AlertService.success(response.data.message);
+                    
+                    // Reload data if there are successful imports
+                    if ($scope.importResult.success_count > 0) {
+                        $scope.loadData();
+                    }
+                } else {
+                    AlertService.error('Import gagal: ' + response.data.message);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error importing CSV:', error);
+                $scope.uploadProgress.uploading = false;
+                
+                if (error.data && error.data.message) {
+                    AlertService.error('Import gagal: ' + error.data.message);
+                } else {
+                    AlertService.error('Terjadi kesalahan saat import CSV');
+                }
+            });
+    };
+    
+    // Download failed records
+    $scope.downloadFailedRecords = function() {
+        if (!$scope.importResult || !$scope.importResult.failed_records) {
+            return;
+        }
+        
+        ApiService.siswa.downloadFailedRecords($scope.importResult.failed_records)
+            .then(function(response) {
+                var blob = new Blob([response.data], { type: 'text/csv' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'import_gagal_' + new Date().getTime() + '.csv';
+                link.click();
+                AlertService.success('File data gagal berhasil didownload');
+            })
+            .catch(function(error) {
+                console.error('Error downloading failed records:', error);
+                AlertService.error('Gagal mendownload file data gagal');
+            });
+    };
+    
     // Initial load
     $scope.loadData();
     $scope.loadKelas();

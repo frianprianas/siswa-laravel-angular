@@ -268,6 +268,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .page-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
         }
         
         .page-title {
@@ -278,7 +287,7 @@
         }
         
         .page-title i {
-            font-size: 32px;
+            font-size: 28px;
             color: var(--primary-color);
         }
         
@@ -316,51 +325,95 @@
         }
         
         /* Buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            border: none;
-            border-radius: 10px;
-            padding: 12px 24px;
+        .btn {
+            font-size: 13px;
+            border-radius: 8px;
             font-weight: 500;
-            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
             transition: all 0.3s;
         }
         
+        .btn i {
+            font-size: 12px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(79, 195, 247, 0.25);
+        }
+        
         .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(79, 195, 247, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.35);
         }
         
         .btn-success {
             background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
             border: none;
-            border-radius: 10px;
-            padding: 12px 24px;
-            font-weight: 500;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.25);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.35);
         }
         
         .btn-warning {
             background: linear-gradient(135deg, #FFA726 0%, #F57C00 100%);
             border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 500;
+            padding: 7px 14px;
+            box-shadow: 0 2px 8px rgba(255, 167, 38, 0.25);
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 167, 38, 0.35);
         }
         
         .btn-danger {
             background: linear-gradient(135deg, #EF5350 0%, #C62828 100%);
             border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-weight: 500;
+            padding: 7px 14px;
+            box-shadow: 0 2px 8px rgba(239, 83, 80, 0.25);
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 83, 80, 0.35);
         }
         
         .btn-info {
             background: linear-gradient(135deg, #29B6F6 0%, #0277BD 100%);
             border: none;
-            border-radius: 10px;
-            padding: 12px 24px;
-            font-weight: 500;
+            padding: 8px 16px;
+            box-shadow: 0 2px 8px rgba(41, 182, 246, 0.25);
+        }
+        
+        .btn-info:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(41, 182, 246, 0.35);
+        }
+        
+        .btn-secondary {
+            background: #90A4AE;
+            border: none;
+            padding: 8px 16px;
+        }
+        
+        .btn-secondary:hover {
+            background: #78909C;
+            transform: translateY(-1px);
+        }
+        
+        .btn-sm {
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+        
+        .btn-sm i {
+            font-size: 11px;
         }
         
         /* Tables */

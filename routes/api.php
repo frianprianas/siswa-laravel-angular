@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\SiswaApiController;
 use App\Http\Controllers\Api\KelasApiController;
 use App\Http\Controllers\Api\JurusanApiController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\ImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,11 @@ Route::get('/me', [AuthController::class, 'me']);
 | Routes ini digunakan oleh Angular.js untuk CRUD data
 | Semua response dalam format JSON
 */
+
+// Import CSV Routes
+Route::get('/siswa/template/download', [ImportController::class, 'downloadTemplate']);
+Route::post('/siswa/import/csv', [ImportController::class, 'importCSV']);
+Route::post('/siswa/import/failed-records', [ImportController::class, 'downloadFailedRecords']);
 
 // API Routes untuk Siswa
 Route::apiResource('siswa', SiswaApiController::class);

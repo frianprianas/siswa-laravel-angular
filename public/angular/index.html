@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="id" ng-app="siswaApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Siswa - AngularJS</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4FC3F7;
+            --primary-dark: #0288D1;
+            --primary-light: #B3E5FC;
+            --sidebar-bg: #FFFFFF;
+            --sidebar-hover: #E1F5FE;
+            --header-bg: #0288D1;
+            --content-bg: #F5F5F5;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--content-bg);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        .main-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(135deg, var(--header-bg) 0%, var(--primary-color) 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1030;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        
+        .menu-toggle:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .header-logo i {
+            font-size: 32px;
+        }
+        
+        .header-logo-text h1 {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.2;
+        }
+        
+        .header-logo-text p {
+            font-size: 11px;
+            margin: 0;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .header-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header-info i {
+            font-size: 18px;
+        }
+        
+        .header-info-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header-info-text small {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+        
+        .header-info-text strong {
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        /* Logout Button */
+        .btn-logout {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.25);
+            transform: rotate(15deg);
+        }
+        
+        .btn-logout i {
+            font-size: 16px;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 260px;
+            height: calc(100vh - 70px);
+            background: var(--sidebar-bg);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            z-index: 1020;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+        
+        .sidebar.collapsed {
+            transform: translateX(-260px);
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav-item {
+            margin: 5px 15px;
+        }
+        
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            color: #546E7A;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .nav-link-custom i {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+            color: var(--primary-color);
+        }
+        
+        .nav-link-custom:hover {
+            background: var(--sidebar-hover);
+            color: var(--primary-dark);
+            transform: translateX(5px);
+        }
+        
+        .nav-link-custom.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
+        }
+        
+        .nav-link-custom.active i {
+            color: white;
+        }
+        
+        .nav-section-title {
+            padding: 20px 18px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #90A4AE;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 260px;
+            margin-top: 70px;
+            padding: 30px;
+            min-height: calc(100vh - 140px);
+            transition: margin-left 0.3s ease;
+        }
+        
+        .main-content.expanded {
+            margin-left: 0;
+        }
+        
+        /* Login Page - Full width, no margins */
+        .main-content.login-page {
+            margin-left: 0;
+            margin-top: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 0;
+        }
+        
+        .page-title i {
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+        
+        .page-title-text h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 600;
+            color: #263238;
+        }
+        
+        .page-title-text p {
+            margin: 0;
+            font-size: 13px;
+            color: #78909C;
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 25px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+            padding: 20px 25px;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(79, 195, 247, 0.3);
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(79, 195, 247, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 500;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #FFA726 0%, #F57C00 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #EF5350 0%, #C62828 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-weight: 500;
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #29B6F6 0%, #0277BD 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-weight: 500;
+        }
+        
+        /* Tables */
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table thead {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #E1F5FE 100%);
+        }
+        
+        .table thead th {
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 14px;
+        }
+        
+        .table tbody tr {
+            transition: background 0.2s;
+        }
+        
+        .table tbody tr:hover {
+            background: var(--sidebar-hover);
+        }
+        
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+        
+        /* Footer */
+        .main-footer {
+            background: white;
+            border-top: 1px solid #E0E0E0;
+            padding: 25px 30px;
+            margin-top: 40px;
+            margin-left: 260px;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .main-footer.expanded {
+            margin-left: 0;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+        
+        .footer-logo i {
+            font-size: 24px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .footer-links a {
+            color: #78909C;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-dark);
+        }
+        
+        .footer-right {
+            color: #78909C;
+            font-size: 14px;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .footer-social a {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .footer-social a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Alert */
+        .alert-fixed {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            z-index: 1050;
+            min-width: 350px;
+            max-width: 450px;
+            animation: slideIn 0.3s ease-in-out;
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-color: var(--primary-color);
+            border-right-color: transparent;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-260px);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .main-footer {
+                margin-left: 0;
+            }
+            
+            .header-info-text {
+                display: none;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-left {
+                flex-direction: column;
+            }
+        }
+        
+        /* Utilities */
+        .table-actions {
+            white-space: nowrap;
+        }
+        
+        .badge {
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-weight: 500;
+        }
+        
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1px solid #E0E0E0;
+            padding: 12px 15px;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.15);
+        }
+    </style>
+</head>
+<body ng-controller="MainController">
+    
+    <!-- Header - Only show when authenticated -->
+    <header class="main-header" ng-if="isAuthenticated">
+        <div class="header-left">
+            <button class="menu-toggle" ng-click="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="#!/" class="header-logo">
+                <i class="fas fa-graduation-cap"></i>
+                <div class="header-logo-text">
+                    <h1>Aplikasi Siswa</h1>
+                    <p>Sistem Informasi Manajemen</p>
+                </div>
+            </a>
+        </div>
+        <div class="header-right">
+            <div class="header-info">
+                <i class="fas fa-calendar-alt"></i>
+                <div class="header-info-text">
+                    <small>Tanggal</small>
+                    <strong>{{ currentDate | date:'dd MMMM yyyy' }}</strong>
+                </div>
+            </div>
+            <div class="header-info">
+                <i class="fas fa-user-circle"></i>
+                <div class="header-info-text">
+                    <small>{{ currentUser.role || 'User' }}</small>
+                    <strong>{{ currentUser.name || 'Guest' }}</strong>
+                </div>
+            </div>
+            <button class="btn-logout" ng-click="logout()" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar - Only show when authenticated -->
+    <aside class="sidebar" ng-class="{'collapsed': sidebarCollapsed}" ng-if="isAuthenticated">
+        <ul class="sidebar-nav">
+            <li class="nav-section-title">Menu Utama</li>
+            
+            <li class="nav-item">
+                <a href="#!/" class="nav-link-custom" ng-class="{'active': isActive('/')}">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            
+            <li class="nav-section-title">Data Master</li>
+            
+            <li class="nav-item">
+                <a href="#!/siswa" class="nav-link-custom" ng-class="{'active': isActive('/siswa')}">
+                    <i class="fas fa-users"></i>
+                    <span>Data Siswa</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#!/kelas" class="nav-link-custom" ng-class="{'active': isActive('/kelas')}">
+                    <i class="fas fa-door-open"></i>
+                    <span>Data Kelas</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#!/jurusan" class="nav-link-custom" ng-class="{'active': isActive('/jurusan')}">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Data Jurusan</span>
+                </a>
+            </li>
+            
+            <li class="nav-section-title">Sistem</li>
+            
+            <li class="nav-item">
+                <a href="#!/laporan" class="nav-link-custom">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Laporan</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#!/pengaturan" class="nav-link-custom">
+                    <i class="fas fa-cog"></i>
+                    <span>Pengaturan</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a href="#!/bantuan" class="nav-link-custom">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Bantuan</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Alert Container -->
+    <div ng-controller="AlertController">
+        <div ng-if="alert.show" class="alert alert-{{alert.type}} alert-dismissible fade show alert-fixed" role="alert">
+            <i class="fas" ng-class="{'fa-check-circle': alert.type === 'success', 'fa-exclamation-triangle': alert.type === 'danger', 'fa-info-circle': alert.type === 'info'}"></i>
+            <strong>{{ alert.message }}</strong>
+            <button type="button" class="btn-close" ng-click="closeAlert()"></button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" ng-class="{'expanded': sidebarCollapsed, 'login-page': !isAuthenticated}">
+        <!-- AngularJS Views will be loaded here -->
+        <div ng-view></div>
+    </div>
+
+    <!-- Footer - Only show when authenticated -->
+    <footer class="main-footer" ng-class="{'expanded': sidebarCollapsed}" ng-if="isAuthenticated">
+        <div class="footer-content">
+            <div class="footer-left">
+                <div class="footer-logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Aplikasi Siswa</span>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="#!/">Tentang</a></li>
+                    <li><a href="#!/">Kontak</a></li>
+                    <li><a href="#!/">Kebijakan</a></li>
+                    <li><a href="#!/">Bantuan</a></li>
+                </ul>
+            </div>
+            <div class="footer-right">
+                <div>&copy; 2026 Aplikasi Siswa. All rights reserved.</div>
+                <div class="footer-social">
+                    <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/services/auth.service.js"></script>
+    <script src="js/services/api.service.js"></script>
+    <script src="js/services/alert.service.js"></script>
+    <script src="js/controllers/siswa.controller.js"></script>
+    <script src="js/controllers/kelas.controller.js"></script>
+    <script src="js/controllers/jurusan.controller.js"></script>
+    <script src="js/controllers/alert.controller.js"></script>
+
+</body>
+</html>

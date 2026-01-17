@@ -1,0 +1,243 @@
+<!-- Siswa Form View (Create & Edit) -->
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="page-title">
+        <i class="fas" ng-class="isEdit ? 'fa-edit' : 'fa-plus'"></i>
+        <div class="page-title-text">
+            <h2>{{ pageTitle }}</h2>
+            <p ng-if="!isEdit">Tambahkan data siswa baru ke dalam sistem</p>
+            <p ng-if="isEdit">Ubah informasi data siswa yang sudah terdaftar</p>
+        </div>
+    </div>
+    <div>
+        <a href="#!/siswa" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Kembali
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-user"></i> Formulir Data Siswa
+                </h5>
+            </div>
+            <div class="card-body">
+                
+                <!-- Loading State -->
+                <div ng-if="loading && isEdit" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Memuat data siswa...</p>
+                </div>
+                
+                <!-- Form -->
+                <form ng-submit="submitForm()" ng-if="!loading || !isEdit" novalidate>
+                    
+                    <!-- Informasi Identitas -->
+                    <div class="section-title">
+                        <i class="fas fa-id-card"></i> Informasi Identitas
+                    </div>
+                    
+                    <div class="row">
+                        <!-- NIS -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-hashtag"></i> NIS 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" ng-model="formData.nis" 
+                                       ng-class="{'is-invalid': errors.nis}" 
+                                       placeholder="Contoh: 2024001" required>
+                                <div class="invalid-feedback" ng-if="errors.nis">
+                                    {{ errors.nis[0] }}
+                                </div>
+                                <small class="form-text text-muted">Nomor Induk Siswa (unik)</small>
+                            </div>
+                        </div>
+                        
+                        <!-- Nama -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user"></i> Nama Lengkap 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" ng-model="formData.nama" 
+                                       ng-class="{'is-invalid': errors.nama}" 
+                                       placeholder="Contoh: Ahmad Fauzi" required>
+                                <div class="invalid-feedback" ng-if="errors.nama">
+                                    {{ errors.nama[0] }}
+                                </div>
+                                <small class="form-text text-muted">Nama lengkap sesuai identitas</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informasi Kelahiran -->
+                    <div class="section-title">
+                        <i class="fas fa-birthday-cake"></i> Informasi Kelahiran
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Tempat Lahir -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i> Tempat Lahir 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" ng-model="formData.tempat" 
+                                       ng-class="{'is-invalid': errors.tempat}" 
+                                       placeholder="Contoh: Jakarta" required>
+                                <div class="invalid-feedback" ng-if="errors.tempat">
+                                    {{ errors.tempat[0] }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tanggal Lahir -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar-alt"></i> Tanggal Lahir 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <input type="date" class="form-control" ng-model="formData.tgl_lahir" 
+                                       ng-class="{'is-invalid': errors.tgl_lahir}" required>
+                                <div class="invalid-feedback" ng-if="errors.tgl_lahir">
+                                    {{ errors.tgl_lahir[0] }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Informasi Akademik -->
+                    <div class="section-title">
+                        <i class="fas fa-graduation-cap"></i> Informasi Akademik
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Jenis Kelamin -->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-venus-mars"></i> Jenis Kelamin 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" ng-model="formData.jenis_kelamin" 
+                                        ng-class="{'is-invalid': errors.jenis_kelamin}" required>
+                                    <option value="">-- Pilih --</option>
+                                    <option value="L">Laki-laki</option>
+                                    <option value="P">Perempuan</option>
+                                </select>
+                                <div class="invalid-feedback" ng-if="errors.jenis_kelamin">
+                                    {{ errors.jenis_kelamin[0] }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Kelas -->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-door-open"></i> Kelas 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" ng-model="formData.kelas_id" 
+                                        ng-class="{'is-invalid': errors.kelas_id}" required>
+                                    <option value="">-- Pilih Kelas --</option>
+                                    <option ng-repeat="kelas in kelasList" value="{{ kelas.id }}">
+                                        {{ kelas.kelas }}
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback" ng-if="errors.kelas_id">
+                                    {{ errors.kelas_id[0] }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Jurusan -->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-book"></i> Jurusan 
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-select" ng-model="formData.jurusan_id" 
+                                        ng-class="{'is-invalid': errors.jurusan_id}" required>
+                                    <option value="">-- Pilih Jurusan --</option>
+                                    <option ng-repeat="jurusan in jurusanList" value="{{ jurusan.id }}">
+                                        {{ jurusan.jurusan }} - {{ jurusan.bidang }}
+                                    </option>
+                                </select>
+                                <div class="invalid-feedback" ng-if="errors.jurusan_id">
+                                    {{ errors.jurusan_id[0] }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <a href="#!/siswa" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Batal
+                        </a>
+                        <button type="submit" class="btn btn-primary px-4" ng-disabled="loading">
+                            <span ng-if="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Menyimpan...
+                            </span>
+                            <span ng-if="!loading">
+                                <i class="fas fa-save"></i> {{ isEdit ? 'Update Data' : 'Simpan Data' }}
+                            </span>
+                        </button>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+        
+        <!-- Info Card -->
+        <div class="card mt-3" style="background: #FFF3CD; border-color: #FFEB3B;">
+            <div class="card-body">
+                <h6 class="mb-2" style="color: #F57F17;">
+                    <i class="fas fa-info-circle"></i> Petunjuk Pengisian
+                </h6>
+                <ul class="mb-0 small" style="color: #6D4C00;">
+                    <li>Semua field yang bertanda <span class="text-danger">*</span> wajib diisi</li>
+                    <li>NIS harus unik dan tidak boleh sama dengan siswa lain</li>
+                    <li>Pastikan data tempat dan tanggal lahir sudah benar</li>
+                    <li>Pilih kelas dan jurusan sesuai dengan program studi siswa</li>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Custom CSS -->
+<style>
+.section-title {
+    font-weight: 600;
+    color: #0288D1;
+    font-size: 1.1rem;
+    padding: 12px 0;
+    margin: 20px 0 15px 0;
+    border-bottom: 2px solid #B3E5FC;
+}
+
+.section-title i {
+    margin-right: 8px;
+}
+
+.form-label i {
+    color: #4FC3F7;
+    margin-right: 5px;
+}
+</style>

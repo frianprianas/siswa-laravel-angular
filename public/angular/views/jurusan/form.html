@@ -1,0 +1,80 @@
+<!-- Jurusan Form View (Create & Edit) -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header" ng-class="isEdit ? 'bg-warning' : 'bg-info text-white'">
+                <h4 class="mb-0">
+                    <i class="fas" ng-class="isEdit ? 'fa-edit' : 'fa-plus'"></i>
+                    {{ pageTitle }}
+                </h4>
+            </div>
+            <div class="card-body">
+                
+                <!-- Loading State -->
+                <div ng-if="loading && isEdit" class="loading">
+                    <div class="spinner-border text-info" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                
+                <!-- Form -->
+                <form ng-submit="submitForm()" ng-if="!loading || !isEdit" novalidate>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nama Jurusan <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" ng-model="formData.jurusan" 
+                                       ng-class="{'is-invalid': errors.jurusan}" 
+                                       placeholder="Contoh: TKJ, RPL, AKT" maxlength="50" required>
+                                <div class="invalid-feedback" ng-if="errors.jurusan">
+                                    {{ errors.jurusan[0] }}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Bidang Keahlian <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" ng-model="formData.bidang" 
+                                       ng-class="{'is-invalid': errors.bidang}" 
+                                       placeholder="Contoh: Informatika, Bisnis" maxlength="100" required>
+                                <div class="invalid-feedback" ng-if="errors.bidang">
+                                    {{ errors.bidang[0] }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Contoh:</strong>
+                        <ul class="mb-0">
+                            <li>TKJ - Informatika</li>
+                            <li>RPL - Informatika</li>
+                            <li>AKT - Bisnis dan Manajemen</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a href="#!/jurusan" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </a>
+                        <button type="submit" class="btn" ng-class="isEdit ? 'btn-warning' : 'btn-info'" 
+                                ng-disabled="loading">
+                            <span ng-if="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Menyimpan...
+                            </span>
+                            <span ng-if="!loading">
+                                <i class="fas fa-save"></i> {{ isEdit ? 'Update' : 'Simpan' }}
+                            </span>
+                        </button>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>

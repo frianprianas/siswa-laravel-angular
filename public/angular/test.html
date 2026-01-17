@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="testApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Test AngularJS</title>
+</head>
+<body ng-controller="TestController">
+    <h1>Test AngularJS</h1>
+    <p>Stats Siswa: {{ stats.siswa }}</p>
+    <p>Stats Kelas: {{ stats.kelas }}</p>
+    <p>Stats Jurusan: {{ stats.jurusan }}</p>
+    <p>Test Binding: {{ testMessage }}</p>
+    
+    <button ng-click="loadData()">Load Data</button>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('testApp', []);
+        
+        app.controller('TestController', ['$scope', '$http', function($scope, $http) {
+            console.log('TestController loaded');
+            
+            $scope.testMessage = 'AngularJS is working!';
+            $scope.stats = {
+                siswa: 0,
+                kelas: 0,
+                jurusan: 0
+            };
+            
+            $scope.loadData = function() {
+                console.log('Loading data...');
+                
+                // Test API call
+                $http.get('http://localhost/siswa/public/api/siswa')
+                    .then(function(response) {
+                        console.log('Response:', response);
+                        $scope.stats.siswa = response.data.data.length;
+                    })
+                    .catch(function(error) {
+                        console.error('Error:', error);
+                    });
+                    
+                $http.get('http://localhost/siswa/public/api/kelas')
+                    .then(function(response) {
+                        console.log('Kelas Response:', response);
+                        $scope.stats.kelas = response.data.data.length;
+                    })
+                    .catch(function(error) {
+                        console.error('Error:', error);
+                    });
+                    
+                $http.get('http://localhost/siswa/public/api/jurusan')
+                    .then(function(response) {
+                        console.log('Jurusan Response:', response);
+                        $scope.stats.jurusan = response.data.data.length;
+                    })
+                    .catch(function(error) {
+                        console.error('Error:', error);
+                    });
+            };
+            
+            // Auto load on init
+            $scope.loadData();
+        }]);
+    </script>
+</body>
+</html>

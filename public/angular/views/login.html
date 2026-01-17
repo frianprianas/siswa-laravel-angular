@@ -1,0 +1,450 @@
+<!-- Login View -->
+<!DOCTYPE html>
+<div class="login-container">
+    
+    <!-- Login Box -->
+    <div class="login-box">
+        
+        <!-- Left Side - Branding -->
+        <div class="login-left">
+            <div class="login-branding">
+                <div class="brand-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h2>Aplikasi Siswa</h2>
+                <p>Sistem Informasi Manajemen Data Siswa</p>
+                
+                <div class="features-list">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Manajemen Data Siswa</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Manajemen Kelas & Jurusan</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Interface Modern & Responsif</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Keamanan Data Terjamin</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="login-footer-branding">
+                <p>&copy; 2026 Aplikasi Siswa. All rights reserved.</p>
+            </div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="login-right">
+            <div class="login-form-container">
+                
+                <!-- Logo & Title -->
+                <div class="login-header">
+                    <div class="login-icon">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <h3>Selamat Datang</h3>
+                    <p>Silakan login untuk mengakses sistem</p>
+                </div>
+                
+                <!-- Login Form -->
+                <form ng-submit="login()" class="login-form" novalidate>
+                    
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input 
+                            type="email" 
+                            class="form-control" 
+                            ng-model="credentials.email" 
+                            ng-class="{'is-invalid': errors.email}"
+                            placeholder="Masukkan email Anda"
+                            required
+                            autofocus>
+                        <div class="invalid-feedback" ng-if="errors.email">
+                            {{ errors.email[0] }}
+                        </div>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input 
+                            type="password" 
+                            class="form-control" 
+                            ng-model="credentials.password"
+                            ng-class="{'is-invalid': errors.password}"
+                            placeholder="Masukkan password Anda"
+                            required>
+                        <div class="invalid-feedback" ng-if="errors.password">
+                            {{ errors.password[0] }}
+                        </div>
+                    </div>
+                    
+                    <!-- Remember Me -->
+                    <div class="form-check mb-3">
+                        <input type="checkbox" class="form-check-input" id="rememberMe" ng-model="credentials.remember">
+                        <label class="form-check-label" for="rememberMe">
+                            Ingat saya
+                        </label>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button 
+                        type="submit" 
+                        class="btn btn-primary btn-login w-100"
+                        ng-disabled="loading">
+                        <span ng-if="!loading">
+                            <i class="fas fa-sign-in-alt"></i> Masuk
+                        </span>
+                        <span ng-if="loading">
+                            <i class="fas fa-spinner fa-spin"></i> Memproses...
+                        </span>
+                    </button>
+                    
+                    <!-- Demo Credentials Info -->
+                    <div class="demo-info">
+                        <div class="alert alert-info border-0 mb-0">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Demo Login:</strong><br>
+                            <small>
+                                Email: <code>admin@siswa.com</code><br>
+                                Password: <code>password</code>
+                            </small>
+                        </div>
+                    </div>
+                    
+                </form>
+                
+                <!-- Additional Links -->
+                <div class="login-links">
+                    <a href="#" class="text-muted">
+                        <i class="fas fa-question-circle"></i> Bantuan
+                    </a>
+                    <span class="text-muted">•</span>
+                    <a href="#" class="text-muted">
+                        <i class="fas fa-shield-alt"></i> Kebijakan Privasi
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+<!-- Custom Login Styles -->
+<style>
+    /* Login Container */
+    .login-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .login-container::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        animation: pulse 15s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    /* Login Box */
+    .login-box {
+        display: flex;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
+        max-width: 1000px;
+        width: 100%;
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Left Side - Branding */
+    .login-left {
+        flex: 1;
+        background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
+        padding: 60px 40px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .login-branding {
+        text-align: center;
+    }
+    
+    .brand-icon {
+        width: 100px;
+        height: 100px;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .brand-icon i {
+        font-size: 50px;
+    }
+    
+    .login-branding h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .login-branding > p {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-bottom: 40px;
+    }
+    
+    .features-list {
+        text-align: left;
+        max-width: 350px;
+        margin: 0 auto;
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        font-size: 15px;
+    }
+    
+    .feature-item i {
+        margin-right: 15px;
+        font-size: 20px;
+        opacity: 0.9;
+    }
+    
+    .login-footer-branding {
+        text-align: center;
+        opacity: 0.8;
+        font-size: 14px;
+    }
+    
+    /* Right Side - Form */
+    .login-right {
+        flex: 1;
+        padding: 60px 50px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .login-form-container {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .login-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .login-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        color: white;
+    }
+    
+    .login-icon i {
+        font-size: 40px;
+    }
+    
+    .login-header h3 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #212121;
+        margin-bottom: 10px;
+    }
+    
+    .login-header p {
+        color: #546E7A;
+        font-size: 15px;
+    }
+    
+    /* Form Styles */
+    .login-form .form-group {
+        margin-bottom: 25px;
+    }
+    
+    .login-form .form-label {
+        font-weight: 600;
+        color: #212121;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .login-form .form-label i {
+        color: #4FC3F7;
+        margin-right: 5px;
+    }
+    
+    .login-form .form-control {
+        height: 50px;
+        border: 2px solid #E0E0E0;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+    }
+    
+    .login-form .form-control:focus {
+        border-color: #4FC3F7;
+        box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.2);
+    }
+    
+    .login-form .form-control.is-invalid {
+        border-color: #f44336;
+    }
+    
+    .login-form .invalid-feedback {
+        display: block;
+        color: #f44336;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+    
+    .btn-login {
+        height: 50px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-login:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(79, 195, 247, 0.4);
+    }
+    
+    .btn-login:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+    
+    .demo-info {
+        margin-top: 25px;
+    }
+    
+    .demo-info .alert {
+        background: #E1F5FE !important;
+        color: #01579B;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    
+    .demo-info code {
+        background: rgba(1, 87, 155, 0.1);
+        padding: 2px 8px;
+        border-radius: 4px;
+        color: #01579B;
+    }
+    
+    .login-links {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 14px;
+    }
+    
+    .login-links a {
+        color: #546E7A;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .login-links a:hover {
+        color: #0288D1;
+    }
+    
+    .login-links span {
+        margin: 0 10px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .login-box {
+            flex-direction: column;
+            border-radius: 15px;
+        }
+        
+        .login-left {
+            padding: 40px 30px;
+        }
+        
+        .login-branding h2 {
+            font-size: 24px;
+        }
+        
+        .brand-icon {
+            width: 70px;
+            height: 70px;
+        }
+        
+        .brand-icon i {
+            font-size: 35px;
+        }
+        
+        .features-list {
+            display: none;
+        }
+        
+        .login-right {
+            padding: 40px 30px;
+        }
+        
+        .login-header h3 {
+            font-size: 24px;
+        }
+        
+        .login-icon {
+            width: 60px;
+            height: 60px;
+        }
+        
+        .login-icon i {
+            font-size: 30px;
+        }
+    }
+</style>

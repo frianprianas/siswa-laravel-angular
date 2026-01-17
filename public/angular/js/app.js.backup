@@ -1,0 +1,182 @@
+/**
+ * Main AngularJS Application Module
+ * Konfigurasi routing dan dependency injection
+ */
+
+// Deklarasi main module dengan dependency
+var app = angular.module('siswaApp', ['ngRoute']);
+
+/**
+ * Konfigurasi Routing
+ * Menghubungkan URL dengan template dan controller
+ */
+app.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    
+    $routeProvider
+        // Home / Dashboard
+        .when('/', {
+            templateUrl: 'views/home.html',
+            controller: 'HomeController'
+        })
+        
+        // Siswa Routes
+        .when('/siswa', {
+            templateUrl: 'views/siswa/list.html',
+            controller: 'SiswaListController'
+        })
+        .when('/siswa/create', {
+            templateUrl: 'views/siswa/form.html',
+            controller: 'SiswaCreateController'
+        })
+        .when('/siswa/edit/:id', {
+            templateUrl: 'views/siswa/form.html',
+            controller: 'SiswaEditController'
+        })
+        
+        // Kelas Routes
+        .when('/kelas', {
+            templateUrl: 'views/kelas/list.html',
+            controller: 'KelasListController'
+        })
+        .when('/kelas/create', {
+            templateUrl: 'views/kelas/form.html',
+            controller: 'KelasCreateController'
+        })
+        .when('/kelas/edit/:id', {
+            templateUrl: 'views/kelas/form.html',
+            controller: 'KelasEditController'
+        })
+        
+        // Jurusan Routes
+        .when('/jurusan', {
+            templateUrl: 'views/jurusan/list.html',
+            controller: 'JurusanListController'
+        })
+        .when('/jurusan/create', {
+            templateUrl: 'views/jurusan/form.html',
+            controller: 'JurusanCreateController'
+        })
+        .when('/jurusan/edit/:id', {
+            templateUrl: 'views/jurusan/form.html',
+            controller: 'JurusanEditController'
+        })
+        
+        // 404 Not Found
+        .otherwise({
+            redirectTo: '/'
+        });
+    
+    // Enable HTML5 Mode (remove # from URL)
+    // Uncomment jika sudah setup .htaccess
+    // $locationProvider.html5Mode(true);
+}]);
+
+/**
+ * Home Controller
+ * Controller untuk halaman dashboard/home
+ */
+app.controller('HomeController', ['$scope', 'ApiService', function($scope, ApiService) {
+    console.log('HomeController initialized');
+    
+    $scope.pageTitle = 'Dashboard';
+    $scope.stats = {
+        siswa: 0,
+        kelas: 0,
+        jurusan: 0
+    };
+    $scope.loading = true;
+    
+    // Load statistics dari API
+    $scope.loadStatistics = function() {
+        console.log('Loading statistics...');
+        
+        // Get total siswa
+        ApiService.siswa.getAll()
+            .then(function(response) {
+                console.log('Siswa data:', response.data);
+                if (response.data && response.data.data) {
+                    $scope.stats.siswa = response.data.data.length;
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading siswa:', error);
+            });
+        
+        // Get total kelas
+        ApiService.kelas.getAll()
+            .then(function(response) {
+                console.log('Kelas data:', response.data);
+                if (response.data && response.data.data) {
+                    $scope.stats.kelas = response.data.data.length;
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading kelas:', error);
+            });
+        
+        // Get total jurusan
+        ApiService.jurusan.getAll()
+            .then(function(response) {
+                console.log('Jurusan data:', response.data);
+                if (response.data && response.data.data) {
+                    $scope.stats.jurusan = response.data.data.length;
+                }
+                $scope.loading = false;
+            })
+            .catch(function(error) {
+                console.error('Error loading jurusan:', error);
+                $scope.loading = false;
+            });
+    };
+    
+    // Load statistics saat controller initialized
+    $scope.loadStatistics();
+}]);
+
+/**
+ * Main Controller
+ * Controller utama untuk sidebar dan layout
+ */
+app.controller('MainController', ['$scope', '$location', function($scope, $location) {
+    $scope.sidebarCollapsed = false;
+    $scope.currentDate = new Date();
+    
+    // Toggle sidebar
+    $scope.toggleSidebar = function() {
+        $scope.sidebarCollapsed = !$scope.sidebarCollapsed;
+    };
+    
+    // Check if menu is active
+    $scope.isActive = function(path) {
+        var currentPath = $location.path();
+        if (path === '/') {
+            return currentPath === '/';
+        }
+        return currentPath.indexOf(path) === 0;
+    };
+    
+    // Update date every minute
+    setInterval(function() {
+        $scope.$apply(function() {
+            $scope.currentDate = new Date();
+        });
+    }, 60000);
+}]);
+
+/**
+ * Global Configuration
+ * Base URL untuk API
+ */
+app.constant('API_URL', 'http://localhost/siswa/public/api');
+
+/**
+ * Run Block
+ * Dijalankan setiap kali aplikasi start
+ */
+app.run(['$rootScope', '$location', function($rootScope, $location) {
+    // Set active menu berdasarkan current route
+    $rootScope.$on('$routeChangeSuccess', function() {
+        console.log('Route changed to:', $location.path());
+        // Active menu detection handled by ng-class in MainController
+    });
+}]);

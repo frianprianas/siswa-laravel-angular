@@ -1,0 +1,57 @@
+<!-- Kelas Form View (Create & Edit) -->
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header" ng-class="isEdit ? 'bg-warning' : 'bg-success text-white'">
+                <h4 class="mb-0">
+                    <i class="fas" ng-class="isEdit ? 'fa-edit' : 'fa-plus'"></i>
+                    {{ pageTitle }}
+                </h4>
+            </div>
+            <div class="card-body">
+                
+                <!-- Loading State -->
+                <div ng-if="loading && isEdit" class="loading">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+                
+                <!-- Form -->
+                <form ng-submit="submitForm()" ng-if="!loading || !isEdit" novalidate>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Nama Kelas <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" ng-model="formData.kelas" 
+                               ng-class="{'is-invalid': errors.kelas}" 
+                               placeholder="Contoh: XA, XB, XIA" maxlength="10" required>
+                        <div class="invalid-feedback" ng-if="errors.kelas">
+                            {{ errors.kelas[0] }}
+                        </div>
+                        <small class="form-text text-muted">
+                            <i class="fas fa-info-circle"></i> Maksimal 10 karakter
+                        </small>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a href="#!/kelas" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Kembali
+                        </a>
+                        <button type="submit" class="btn" ng-class="isEdit ? 'btn-warning' : 'btn-success'" 
+                                ng-disabled="loading">
+                            <span ng-if="loading">
+                                <i class="fas fa-spinner fa-spin"></i> Menyimpan...
+                            </span>
+                            <span ng-if="!loading">
+                                <i class="fas fa-save"></i> {{ isEdit ? 'Update' : 'Simpan' }}
+                            </span>
+                        </button>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,102 @@
+<!-- Kelas List View -->
+
+<!-- Page Header -->
+<div class="page-header">
+    <div class="page-title">
+        <i class="fas fa-door-open"></i>
+        <div class="page-title-text">
+            <h2>{{ pageTitle }}</h2>
+            <p>Kelola data kelas yang tersedia dalam sistem</p>
+        </div>
+    </div>
+    <div>
+        <a href="#!/kelas/create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tambah Kelas Baru
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-table"></i> Data Kelas
+                </h5>
+            </div>
+            <div class="card-body">
+                
+                <!-- Loading State -->
+                <div ng-if="loading" class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Memuat data kelas...</p>
+                </div>
+                
+                <!-- Data Table -->
+                <div ng-if="!loading" class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th width="8%">No</th>
+                                <th>Nama Kelas</th>
+                                <th width="20%">Jumlah Siswa</th>
+                                <th width="18%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="kelas in kelasList">
+                                <td>{{ $index + 1 }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                             style="width: 40px; height: 40px; background: linear-gradient(135deg, #4FC3F7 0%, #0288D1 100%);">
+                                            <i class="fas fa-door-open text-white"></i>
+                                        </div>
+                                        <strong>{{ kelas.kelas }}</strong>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-users"></i> {{ kelas.siswas_count }} siswa
+                                    </span>
+                                </td>
+                                <td class="table-actions">
+                                    <a href="#!/kelas/edit/{{ kelas.id }}" class="btn btn-sm btn-warning" title="Edit Data">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button ng-click="deleteKelas(kelas)" class="btn btn-sm btn-danger" title="Hapus Data">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr ng-if="kelasList.length === 0">
+                                <td colspan="4" class="text-center py-4">
+                                    <div class="text-muted">
+                                        <i class="fas fa-info-circle fa-2x mb-3 d-block"></i>
+                                        <p class="mb-0">Belum ada data kelas yang terdaftar</p>
+                                        <a href="#!/kelas/create" class="btn btn-primary btn-sm mt-3">
+                                            <i class="fas fa-plus"></i> Tambah Kelas Pertama
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Total Data -->
+                <div ng-if="!loading && kelasList.length > 0" class="mt-3">
+                    <div class="alert alert-info border-0 mb-0" style="background: #E1F5FE;">
+                        <i class="fas fa-info-circle" style="color: #0277BD;"></i>
+                        <small style="color: #01579B;">
+                            Total: <strong>{{ kelasList.length }}</strong> kelas tersedia
+                        </small>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

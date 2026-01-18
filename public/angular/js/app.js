@@ -296,14 +296,17 @@ var hostname = window.location.hostname;
 var apiBaseUrl;
 
 if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    // Lokal development
+    // Lokal development (Laptop Anda tetap menggunakan path lengkap)
     apiBaseUrl = 'http://localhost/siswa/public/api';
 } else {
-    // Server production
-    apiBaseUrl = 'http://192.168.100.136/siswa/public/api';
+    // Server production (Fedora menggunakan root Nginx, jadi path diperingkas)
+    // Kita gunakan host dinamis agar bisa diakses via IP Lokal maupun IP Publik
+    apiBaseUrl = 'http://' + hostname + '/api';
 }
 
 app.constant('API_URL', apiBaseUrl);
+console.log("Aplikasi berjalan di host:", hostname);
+
 
 /**
  * Run Block

@@ -290,9 +290,20 @@ app.controller('BantuanController', ['$scope', function($scope) {
 
 /**
  * Global Configuration
- * Base URL untuk API
+ * Base URL untuk API - Auto detect localhost atau server
  */
-app.constant('API_URL', 'http://localhost/siswa/public/api');
+var hostname = window.location.hostname;
+var apiBaseUrl;
+
+if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    // Lokal development
+    apiBaseUrl = 'http://localhost/siswa/public/api';
+} else {
+    // Server production
+    apiBaseUrl = 'http://192.168.100.136/siswa/public/api';
+}
+
+app.constant('API_URL', apiBaseUrl);
 
 /**
  * Run Block

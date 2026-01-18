@@ -1,19 +1,34 @@
-- name: Update Project
+name: Deploy to Server Fedora (Self-Hosted)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Update Project
         run: |
           cd /var/www/html/siswa
-          # Menghapus konfigurasi safe directory jika belum ada
+          # Daftarkan folder sebagai safe directory agar git pull tidak error
           git config --global --add safe.directory /var/www/html/siswa
           
-          # 1. Simpan sementara perubahan lokal (termasuk app.js)
+          # 1. Simpan sementara perubahan lokal agar tidak bentrok
           git stash
           
           # 2. Tarik update terbaru dari GitHub
           git pull origin main
           
-          # 3. (Opsional) Jika Anda ingin mengembalikan perubahan lokal tadi:
-          # git stash pop
-          
-          # 4. Bersihkan cache Laravel
-          php artisan config:cache
+          # 3. Bersihkan cache Laravel
+          php artisan config:clear
+          php artisan cache:clear
           php artisan view:clear
+          
+          # 4. Pastikan permission folder tetap benar
+          sudo chmod -R 775 storage bootstrap/cache
           echo "Deployment Berhasil lewat Runner Lokal!"

@@ -46,6 +46,11 @@ Route::get('/siswa/template/download', [ImportController::class, 'downloadTempla
 Route::post('/siswa/import/csv', [ImportController::class, 'importCSV']);
 Route::post('/siswa/import/failed-records', [ImportController::class, 'downloadFailedRecords']);
 
+// Export Routes
+Route::get('/siswa/export', [SiswaApiController::class, 'export']);
+Route::get('/kelas/export', [KelasApiController::class, 'export']);
+Route::get('/jurusan/export', [JurusanApiController::class, 'export']);
+
 // API Routes untuk Siswa
 Route::apiResource('siswa', SiswaApiController::class);
 

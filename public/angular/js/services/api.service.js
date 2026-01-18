@@ -62,6 +62,13 @@ app.service('ApiService', ['$http', 'API_URL', function($http, API_URL) {
             }, {
                 responseType: 'blob'
             });
+        },
+        
+        // Export to Excel
+        export: function() {
+            return $http.get(API_URL + '/siswa/export', {
+                responseType: 'blob'
+            });
         }
     };
     
@@ -92,6 +99,13 @@ app.service('ApiService', ['$http', 'API_URL', function($http, API_URL) {
         // Delete kelas
         delete: function(id) {
             return $http.delete(API_URL + '/kelas/' + id);
+        },
+        
+        // Export to Excel
+        export: function() {
+            return $http.get(API_URL + '/kelas/export', {
+                responseType: 'blob'
+            });
         }
     };
     
@@ -122,6 +136,13 @@ app.service('ApiService', ['$http', 'API_URL', function($http, API_URL) {
         // Delete jurusan
         delete: function(id) {
             return $http.delete(API_URL + '/jurusan/' + id);
+        },
+        
+        // Export to Excel
+        export: function() {
+            return $http.get(API_URL + '/jurusan/export', {
+                responseType: 'blob'
+            });
         }
     };
     

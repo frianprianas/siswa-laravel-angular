@@ -157,4 +157,45 @@ class KelasApiController extends Controller
             'message' => 'Data kelas berhasil dihapus'
         ], 200);
     }
+    
+    /**
+     * Export data kelas ke Excel/CSV
+     * GET /api/kelas/export
+     */
+    public function export()
+    {
+        $kelas = \App\Models\Kelas::withCount('siswas')->get();
+        
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="data_kelas_' . date('Y-m-d_His') . '.csv"',
+        ];
+        
+        $callback = function() use ($kelas) {
+            $file = fopen('php://output', 'w');
+            
+            // BOM untuk UTF-8
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Header kolom
+            fputcsv($file, [
+                'Kelas',
+                'Tingkat',
+                'Jumlah Siswa'
+            ], ';');
+            
+            // Data
+            foreach ($kelas as $k) {
+                fputcsv($file, [
+                    $k->kelas,
+                    $k->tingkat,
+                    $k->siswas_count
+                ], ';');
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
 }

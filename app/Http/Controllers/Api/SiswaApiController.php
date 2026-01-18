@@ -184,4 +184,53 @@ class SiswaApiController extends Controller
             'message' => 'Data siswa berhasil dihapus'
         ], 200);
     }
+    
+    /**
+     * Export data siswa ke Excel/CSV
+     * GET /api/siswa/export
+     */
+    public function export()
+    {
+        $siswas = Siswa::with(['kelas', 'jurusan'])->get();
+        
+        $headers = [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => 'attachment; filename="data_siswa_' . date('Y-m-d_His') . '.csv"',
+        ];
+        
+        $callback = function() use ($siswas) {
+            $file = fopen('php://output', 'w');
+            
+            // BOM untuk UTF-8 agar Excel bisa baca dengan benar
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Header kolom
+            fputcsv($file, [
+                'NIS',
+                'Nama',
+                'Tempat Lahir',
+                'Tanggal Lahir',
+                'Jenis Kelamin',
+                'Kelas',
+                'Jurusan'
+            ], ';');
+            
+            // Data
+            foreach ($siswas as $siswa) {
+                fputcsv($file, [
+                    $siswa->nis,
+                    $siswa->nama,
+                    $siswa->tempat ?: '-',
+                    $siswa->tgl_lahir ? date('d/m/Y', strtotime($siswa->tgl_lahir)) : '-',
+                    $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan',
+                    $siswa->kelas ? $siswa->kelas->kelas : '-',
+                    $siswa->jurusan ? $siswa->jurusan->jurusan : '-'
+                ], ';');
+            }
+            
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
 }

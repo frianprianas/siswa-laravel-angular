@@ -59,6 +59,23 @@ app.controller('KelasListController', ['$scope', 'ApiService', 'AlertService', '
             });
     };
     
+    // Export data to Excel
+    $scope.exportData = function() {
+        ApiService.kelas.export()
+            .then(function(response) {
+                var blob = new Blob([response.data], { type: 'text/csv' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'data_kelas_' + new Date().getTime() + '.csv';
+                link.click();
+                AlertService.success('Data kelas berhasil diexport');
+            })
+            .catch(function(error) {
+                console.error('Error exporting data:', error);
+                AlertService.error('Gagal export data kelas');
+            });
+    };
+    
     // Initial load
     $scope.loadData();
 }]);

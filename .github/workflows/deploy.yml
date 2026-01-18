@@ -1,0 +1,29 @@
+name: Deploy to Server Fedora
+
+on:
+  push:
+    branches: [ main ] # Pastikan branch kamu namanya 'main', kalau 'master' ganti ya
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Executing remote ssh commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            cd /var/www/html/siswa
+            sudo git config --global --add safe.directory /var/www/html/siswa
+            sudo git stash
+            sudo git pull origin main
+            sudo git stash pop
+            php artisan config:cache
+            php artisan cache:clear
+            echo "Deployment Berhasil ke Fedora lewat Port 2209!"

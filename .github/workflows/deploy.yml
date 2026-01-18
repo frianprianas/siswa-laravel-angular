@@ -1,60 +1,25 @@
 name: Deploy to Server Fedora
 
-# Alur ini berjalan setiap kali ada 'push' ke branch 'main'
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
-    name: Deployment Job
     runs-on: ubuntu-latest
-
     steps:
-      # 1. Mengambil kode terbaru dari repository GitHub
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2. Menjalankan perintah SSH ke server Fedora
-      - name: SSH Remote Deployment
+      - name: Executing remote ssh commands
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.REMOTE_HOST }}
           username: ${{ secrets.REMOTE_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.REMOTE_PORT }}
-          # Timeout diperpanjang untuk mengantisipasi koneksi lokal yang lambat
-          command_timeout: 30m
           script: |
-            echo "--- Memulai Proses Deployment ---"
-            
-            # Masuk ke folder project
-            cd /var/www/html/siswa || exit
-            
-            # Mengatasi masalah 'dubious ownership' secara otomatis
-            sudo git config --global --add safe.directory /var/www/html/siswa
-            
-            # Mengamankan perubahan lokal (seperti perubahan IP API di app.js)
-            sudo git stash
-            
-            # Menarik kodingan terbaru dari GitHub
+            echo "Koneksi Berhasil!"
+            cd /var/www/html/siswa
             sudo git pull origin main
-            
-            # Mengembalikan perubahan lokal yang di-stash tadi
-            sudo git stash pop || echo "Tidak ada stash untuk dikembalikan"
-            
-            # Sinkronisasi Library & Cache Laravel
-            # Menggunakan --ignore-platform-reqs jika versi PHP di server dan laptop berbeda
-            composer install --no-interaction --prefer-dist --optimize-autoloader --ignore-platform-reqs
-            
-            # Bersihkan dan optimasi cache
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:clear
-            
-            # Pastikan izin folder tetap milik Nginx agar web bisa diakses
-            sudo chown -R nginx:nginx /var/www/html/siswa
-            sudo chmod -R 775 /var/www/html/siswa/storage /var/www/html/siswa/bootstrap/cache
-            
-            echo "--- Deployment Selesai dengan Sukses! ---"
+            php artisan config:clear

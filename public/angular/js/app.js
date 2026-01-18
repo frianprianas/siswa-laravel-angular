@@ -203,9 +203,16 @@ app.controller('MainController', ['$scope', '$location', 'AuthService', 'AlertSe
     $scope.sidebarCollapsed = false;
     $scope.currentDate = new Date();
     $scope.currentUser = AuthService.getCurrentUser();
+    $scope.submenuOpen = null;
     
     // Check authentication status
     $scope.isAuthenticated = AuthService.isAuthenticated();
+    
+    // Load dark theme preference
+    $scope.darkTheme = localStorage.getItem('darkTheme') === 'true';
+    if ($scope.darkTheme) {
+        document.body.classList.add('dark-theme');
+    }
     
     // Watch for route changes to update auth status
     $scope.$on('$routeChangeSuccess', function() {
@@ -216,6 +223,30 @@ app.controller('MainController', ['$scope', '$location', 'AuthService', 'AlertSe
     // Toggle sidebar
     $scope.toggleSidebar = function() {
         $scope.sidebarCollapsed = !$scope.sidebarCollapsed;
+    };
+    
+    // Toggle submenu
+    $scope.toggleSubmenu = function(menu) {
+        if ($scope.submenuOpen === menu) {
+            $scope.submenuOpen = null;
+        } else {
+            $scope.submenuOpen = menu;
+        }
+    };
+    
+    // Toggle dark theme
+    $scope.toggleDarkTheme = function() {
+        $scope.darkTheme = !$scope.darkTheme;
+        
+        if ($scope.darkTheme) {
+            document.body.classList.add('dark-theme');
+            localStorage.setItem('darkTheme', 'true');
+            AlertService.success('Mode gelap diaktifkan');
+        } else {
+            document.body.classList.remove('dark-theme');
+            localStorage.setItem('darkTheme', 'false');
+            AlertService.success('Mode terang diaktifkan');
+        }
     };
     
     // Check if menu is active

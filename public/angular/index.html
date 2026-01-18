@@ -25,6 +25,80 @@
             --header-bg: #0288D1;
             --content-bg: #F5F5F5;
             --card-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --text-color: #37474F;
+            --border-color: #E0E0E0;
+            --card-bg: #FFFFFF;
+        }
+        
+        /* Dark Theme */
+        body.dark-theme {
+            --sidebar-bg: #1E1E1E;
+            --sidebar-hover: #2D2D2D;
+            --header-bg: #121212;
+            --content-bg: #121212;
+            --card-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            --text-color: #E0E0E0;
+            --border-color: #333333;
+            --card-bg: #1E1E1E;
+        }
+        
+        body.dark-theme {
+            background: var(--content-bg);
+            color: var(--text-color);
+        }
+        
+        body.dark-theme .main-content {
+            background: var(--content-bg);
+        }
+        
+        body.dark-theme .card {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+        }
+        
+        body.dark-theme .page-header {
+            background: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        body.dark-theme .main-footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+        
+        body.dark-theme .nav-link-custom {
+            color: #B0BEC5;
+        }
+        
+        body.dark-theme .nav-link-custom:hover {
+            background: var(--sidebar-hover);
+            color: var(--primary-color);
+        }
+        
+        body.dark-theme .nav-section-title {
+            color: #607D8B;
+        }
+        
+        body.dark-theme .table {
+            color: var(--text-color);
+        }
+        
+        body.dark-theme .table tbody tr:hover {
+            background: #2D2D2D;
+        }
+        
+        body.dark-theme .form-control,
+        body.dark-theme .form-select {
+            background: #2D2D2D;
+            color: var(--text-color);
+            border-color: var(--border-color);
+        }
+        
+        body.dark-theme .filter-section {
+            background: #2D2D2D;
+            border-color: var(--border-color);
         }
         
         * {
@@ -235,6 +309,58 @@
             color: #90A4AE;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+        
+        /* Submenu Dropdown */
+        .nav-item.has-submenu {
+            position: relative;
+        }
+        
+        .nav-link-custom.has-dropdown {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-link-custom .dropdown-arrow {
+            font-size: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .nav-link-custom.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .submenu.open {
+            max-height: 200px;
+        }
+        
+        .submenu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px 10px 50px;
+            color: #78909C;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        .submenu a:hover {
+            background: var(--sidebar-hover);
+            color: var(--primary-color);
+        }
+        
+        .submenu a i {
+            font-size: 14px;
+            width: 20px;
+            text-align: center;
         }
         
         /* Main Content */
@@ -714,11 +840,20 @@
                 </a>
             </li>
             
-            <li class="nav-item">
-                <a href="#!/pengaturan" class="nav-link-custom">
-                    <i class="fas fa-cog"></i>
-                    <span>Pengaturan</span>
+            <li class="nav-item has-submenu">
+                <a href="javascript:void(0)" class="nav-link-custom has-dropdown" ng-click="toggleSubmenu('pengaturan')" ng-class="{'open': submenuOpen === 'pengaturan'}">
+                    <span>
+                        <i class="fas fa-cog"></i>
+                        <span>Pengaturan</span>
+                    </span>
+                    <i class="fas fa-chevron-down dropdown-arrow"></i>
                 </a>
+                <div class="submenu" ng-class="{'open': submenuOpen === 'pengaturan'}">
+                    <a href="javascript:void(0)" ng-click="toggleDarkTheme()">
+                        <i class="fas" ng-class="darkTheme ? 'fa-sun' : 'fa-moon'"></i>
+                        <span>{{ darkTheme ? 'Mode Terang' : 'Mode Gelap' }}</span>
+                    </a>
+                </div>
             </li>
             
             <li class="nav-item">

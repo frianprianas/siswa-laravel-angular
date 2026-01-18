@@ -77,6 +77,13 @@ app.config(['$routeProvider', '$locationProvider', function($routeProvider, $loc
             requireAuth: true
         })
         
+        // Bantuan Route
+        .when('/bantuan', {
+            templateUrl: 'views/bantuan.html',
+            controller: 'BantuanController',
+            requireAuth: true
+        })
+        
         // 404 Not Found
         .otherwise({
             redirectTo: '/'
@@ -271,6 +278,14 @@ app.controller('MainController', ['$scope', '$location', 'AuthService', 'AlertSe
             $scope.currentDate = new Date();
         });
     }, 60000);
+}]);
+
+/**
+ * Bantuan Controller
+ * Controller untuk halaman bantuan
+ */
+app.controller('BantuanController', ['$scope', function($scope) {
+    $scope.pageTitle = 'Bantuan';
 }]);
 
 /**

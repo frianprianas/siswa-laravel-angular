@@ -81,12 +81,51 @@
             color: #607D8B;
         }
         
+        /* Dark Theme Table Styles */
+        body.dark-theme .card-body .table,
         body.dark-theme .table {
-            color: var(--text-color);
+            color: var(--text-color) !important;
+            background-color: transparent !important;
         }
         
+        body.dark-theme .card-body .table thead,
+        body.dark-theme .table thead {
+            background: #2D2D2D !important;
+            background-image: none !important;
+        }
+        
+        body.dark-theme .card-body .table thead th,
+        body.dark-theme .table thead th {
+            color: #B0BEC5 !important;
+            border-bottom: 1px solid var(--border-color) !important;
+            background: transparent !important;
+        }
+        
+        body.dark-theme .card-body .table tbody,
+        body.dark-theme .table tbody {
+            background: transparent !important;
+        }
+        
+        body.dark-theme .card-body .table tbody tr,
+        body.dark-theme .table tbody tr {
+            background-color: var(--card-bg) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        body.dark-theme .card-body .table tbody td,
+        body.dark-theme .table tbody td {
+            border-color: var(--border-color) !important;
+            color: var(--text-color) !important;
+            background-color: transparent !important;
+        }
+        
+        body.dark-theme .card-body .table tbody tr:hover,
         body.dark-theme .table tbody tr:hover {
-            background: #2D2D2D;
+            background-color: #2D2D2D !important;
+        }
+        
+        body.dark-theme .badge {
+            opacity: 0.9;
         }
         
         body.dark-theme .form-control,
@@ -546,6 +585,7 @@
         .table {
             border-radius: 10px;
             overflow: hidden;
+            background: white;
         }
         
         .table thead {
@@ -562,6 +602,7 @@
         
         .table tbody tr {
             transition: background 0.2s;
+            background: white;
         }
         
         .table tbody tr:hover {
